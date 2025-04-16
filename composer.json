@@ -1,0 +1,21 @@
+{
+  "name": "joeczucha/annotate",
+  "description": "Annotates Eloquent models with table schema",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "Howdy\\Annotate\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Howdy\\Annotate\\AnnotateServiceProvider"
+      ]
+    }
+  },
+  "require": {
+    "php": "^8.0",
+    "illuminate/console": "^9.0|^10.0"
+  }
+}
