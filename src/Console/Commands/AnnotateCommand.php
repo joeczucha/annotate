@@ -4,27 +4,22 @@ namespace Howdy\Annotate\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-use Howdy\Annotate\Services\SchemaLoader;
 use Howdy\Annotate\Services\AnnotationBuilder;
+use Howdy\Annotate\Services\AnnotationCleaner;
+use Howdy\Annotate\Services\SchemaLoader;
 
 class AnnotateCommand extends Command
 {
     protected $signature = 'annotate';
     protected $description = 'Annotates models with table schema';
 
-    public function handle(SchemaLoader $loader, AnnotationBuilder $builder)
+    public function handle(SchemaLoader $loader, AnnotationBuilder $builder, AnnotationCleaner $cleaner)
     {
         $this->intro();
 
         foreach (File::files(app_path('Models')) as $file) {
             $path = $file->getRealPath();
             $contents = File::get($path);
-
-            if (Str::contains($contents, '/** Schema Information')) {
-                $this->info("Already annotated: {$file->getFilename()}");
-                continue;
-            }
 
             $modelClass = 'App\\Models\\' . $file->getFilenameWithoutExtension();
 
@@ -35,9 +30,10 @@ class AnnotateCommand extends Command
 
             $table = (new $modelClass())->getTable();
 
+            $cleaned = $cleaner->remove($contents);
             $annotation = $builder->build($table);
 
-            $newContents = preg_replace('/<\?php(\s*)/', "<?php$1$annotation", $contents, 1);
+            $newContents = preg_replace('/<\?php(\s*)/', "<?php$1$annotation", $cleaned, 1);
             File::put($path, $newContents);
 
             $this->info("Annotated: {$file->getFilename()}");

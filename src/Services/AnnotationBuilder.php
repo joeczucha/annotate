@@ -19,12 +19,15 @@ class AnnotationBuilder
 
         $columnRows = collect($columns)->map(function ($col) {
             $flags = [];
+
             if (!$col['nullable']) {
                 $flags[] = 'not null';
             }
+
             if ($col['primary']) {
                 $flags[] = 'primary key';
             }
+
             if ($col['auto_inc']) {
                 $flags[] = 'auto increment';
             }
@@ -34,9 +37,11 @@ class AnnotationBuilder
 
         $indexRows = array_map(function ($index) {
             $desc = "({$index->COLUMN_NAME})";
+
             if (!$index->NON_UNIQUE) {
                 $desc .= ', UNIQUE';
             }
+
             return [$index->INDEX_NAME, $desc];
         }, $indexes);
 
@@ -44,19 +49,21 @@ class AnnotationBuilder
 
         $indexTable = $this->formatter->format($indexRows);
 
-        return <<<TEXT
-/** Schema Information
- *
- * Table name: {$table}
- *
-{$columnTable}
- *
- * Indexes
- *
-{$indexTable}
- *
- */
+        $lines = [
+            '/** Schema Information',
+            ' *',
+            " * Table name: {$table}",
+            ' *',
+            ...explode("\n", $columnTable),
+            ' *',
+            ' * Indexes',
+            ' *',
+            ...explode("\n", $indexTable),
+            ' *',
+            ' */',
+            '', // empty line after
+        ];
 
-TEXT;
+        return implode("\n", $lines) . "\n";
     }
 }

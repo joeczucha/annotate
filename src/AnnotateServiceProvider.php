@@ -10,6 +10,7 @@ class AnnotateServiceProvider extends ServiceProvider
     {
         $this->commands([
             Console\Commands\AnnotateCommand::class,
+            Console\Commands\AnnotateClearCommand::class,
         ]);
     }
 }

@@ -18,9 +18,11 @@ class TableFormatter
 
         foreach ($rows as $row) {
             $line = '';
+
             foreach ($row as $i => $value) {
                 $line .= str_pad($value, $colWidths[$i] + 2);
             }
+
             $lines[] = ' *  ' . rtrim($line);
         }
 
