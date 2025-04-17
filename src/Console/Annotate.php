@@ -41,7 +41,7 @@ class Annotate extends Command
 
         foreach ($rows as $row) {
             foreach ($row as $i => $value) {
-                $colWidths[$i] = max($colWidths[$i] ?? 0, strlen($value));
+                $colWidths[$i] = max($colWidths[$i] ?? 10, strlen($value));
             }
         }
 
