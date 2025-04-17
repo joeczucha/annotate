@@ -1,7 +1,13 @@
 {
   "name": "joeczucha/annotate",
-  "description": "Annotates Eloquent models with table schema",
   "type": "library",
+  "description": "Annotates Eloquent models with table schema",
+  "authors": [
+    {
+      "name": "Joe Czucha",
+      "email": "hello@doctypedigital.ie"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Howdy\\Annotate\\": "src/"

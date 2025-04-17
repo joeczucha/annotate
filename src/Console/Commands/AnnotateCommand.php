@@ -6,14 +6,14 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Howdy\Annotate\Services\AnnotationBuilder;
 use Howdy\Annotate\Services\AnnotationCleaner;
-use Howdy\Annotate\Services\SchemaLoader;
+use Howdy\Annotate\Support\HeaderPrinter;
 
 class AnnotateCommand extends Command
 {
     protected $signature = 'annotate';
     protected $description = 'Annotates models with table schema';
 
-    public function handle(SchemaLoader $loader, AnnotationBuilder $builder, AnnotationCleaner $cleaner)
+    public function handle(AnnotationBuilder $builder, AnnotationCleaner $cleaner)
     {
         $this->intro();
 
@@ -45,6 +45,8 @@ class AnnotateCommand extends Command
 
     protected function intro()
     {
+        HeaderPrinter::print($this);
+
         $this->line("🔍 Annotating your models...\n");
     }
 

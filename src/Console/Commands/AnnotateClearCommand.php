@@ -5,6 +5,7 @@ namespace Howdy\Annotate\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Howdy\Annotate\Services\AnnotationCleaner;
+use Howdy\Annotate\Support\HeaderPrinter;
 
 class AnnotateClearCommand extends Command
 {
@@ -13,7 +14,7 @@ class AnnotateClearCommand extends Command
 
     public function handle(AnnotationCleaner $cleaner)
     {
-        $this->line("\n🧹 Clearing model annotations...\n");
+        $this->intro();
 
         foreach (File::files(app_path('Models')) as $file) {
             $path = $file->getRealPath();
@@ -30,8 +31,19 @@ class AnnotateClearCommand extends Command
             $this->info("Removed annotation: {$file->getFilename()}");
         }
 
-        $this->line("\n✅ Done clearing annotations.\n");
-
+        $this->outro();
         return Command::SUCCESS;
+    }
+
+    protected function intro()
+    {
+        HeaderPrinter::print($this);
+
+        $this->line("🧹 Clearing model annotations...\n");
+    }
+
+    protected function outro()
+    {
+        $this->line("\n✅ All done!\n");
     }
 }
